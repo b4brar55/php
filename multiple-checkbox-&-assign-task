@@ -1,0 +1,49 @@
+Tutorial website lectures number 11.
+1)ਇਹਦੇ ਵਿੱਚ ਆਪਣੀ ਇੱਕ userid ਸੀ ਜੋ ਕਿ login user ਦੀ ਹੁੰਦੀ ਸੀ, ਮਤਲਬ ex ਦੇ ਲਈ admin ਦੀ jo ਕੀ session
+ਦੇ through ਆਉਂਦੀ ਸੀ ਆਪਣੇ ਕੋਲ।
+2) ਆਪਾ emp[] ਨਾਮ ਦੀ ਇੱਕ array ਲੈ ਲੈਂਦੇ ਸੀ ਜਿੱਸ ਵਿੱਚ php nal database ਤੋਂ ਸਾਰਾ data fetch kr ਲੈਂਦੇ ਸੀ, ਤੇ display ਕਰ ਦਿੰਦੇ ਸੀ।
+3) task assigned_by ਹੁੰਦੀ ਸੀ current user[login user ex admin] & uid ਦਾ ਮਤਲਬ ਹੁੰਦਾ ਸੀ ਵੀ ਆਪਾ ਕਿਸ-ਕਿਸ user ਨੂੰ task ਦੇਣੀ ਹੈ, ਇਹ emp[] ਨਾਮ ਦੇ ਵਿੱਚ ਸਾਰੇ 
+user ਦੀ uid ਆਜਾਉ (uid ਨੂੰ ਆਪਾ foreach ਨਾਲ[jo loop ਹੀ ਹੈ ਇੱਕ ਹਿਸਾਬ ਦਾ ਓਸ ਨਾਲ ਅਜਾਉ bcoz uid{multiple users ਦੀਆਂ ਨੇ that's why we use foreach}
+4)
+<?php session_start();
+include "../auth/auth.php";
+include "header.php";
+include "../connection.php";?>
+<html><body>
+<h1>Assign Task</h1>
+<br><hr>
+<h2><b>Employee list</b></h2>
+<div style="background-color:f9f0f9;" class="asign_task"></div>
+<?php
+$query = "select * from users where role='employee'";
+$query_run = mysqli_query($con,$query);
+while($res = mysqli_fetch_assoc($query_run)){ ?>
+<form method="post">
+ <div class="checkbox">
+    <label><input type="checkbox" name="emp[]" value="<?php echo$res['uid']; ?>"><?php echo$res['fname']; ?></label>
+</div>
+<?php } ?>
+<label><b>Message</b></label>
+<textarea style="background-color: d3d3d3;" rows="30" cols="80" name="message" placeholder="message">
+</textarea>
+<button type="reset">Cancel</button>
+<button type="submit" name="send">Send</button>  
+</form>
+</body></html>
+<?php
+if(isset($_POST['send'])){
+//the task is assigned_by current user
+// uid is to which user 
+echo "<hr>the current user id is: ".$asign=$_SESSION['user_id'];
+echo "<br><hr>The typed mesg is: ".$mmsg = $_POST['message'];
+echo "<br><hr><br>";
+$emplist = $_POST['emp'];
+print_r ($emplist);
+/* QUERY OF INSERTING*/
+foreach($emplist as $emp){
+$query="insert into task(task, uid, assigned_by, time)values('$mmsg','$emp','$asign',NOW())";
+$query_run = mysqli_query($con,$query);}
+if($query_run){echo "Successfully assigned task";
+}else{
+echo "Error while assigning Task!";
+}}?>
