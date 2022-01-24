@@ -1,0 +1,3 @@
+Id ਨਾਮ ਦਾ ਜਾ ਕਿਸੇ ਵੀ ਨਾਮ ਦੀ value ਦੂਜੇ page ਦੇ ਵਿੱਚ get krn lai [ਇਹ code example ਸੀ tutorial website channel ਤੋਂ
+1) page ਦਾ code <a href="edit_user.php?id=<?php echo $res['uid'];?>">Edit</a>
+2) page ਦਾ code $user_id = $_GET['id'];
